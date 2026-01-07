@@ -1,516 +1,321 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday Bandhu</title>
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Caveat:wght@700&display=swap" rel="stylesheet">
-    
-    <style>
-        /* RESET & BODY */
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        
-        body {
-            background-color: #111;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            font-family: sans-serif;
-            overflow: hidden; 
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Bandhu</title>
 
-        /* --- LOADING SCREEN --- */
-        #loader {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #000; z-index: 100;
-            display: flex; justify-content: center; align-items: center;
-            color: #fff; font-family: 'Pacifico', cursive; font-size: 1.5rem;
-            transition: opacity 1s ease;
-        }
-        #loader.loaded { opacity: 0; pointer-events: none; }
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Caveat:wght@700&display=swap" rel="stylesheet">
 
-        /* --- THE CONTAINER (MOBILE 9:16 FORMAT) --- */
-        .card-container {
-            position: relative;
-            aspect-ratio: 9 / 16;
-            width: min(500px, 53.4vh); 
-            height: auto;
-            box-shadow: 0 0 50px rgba(0,0,0,0.8);
-            border-radius: 16px;
-            overflow: hidden;
-            background-color: #000;
-        }
+<!-- Preload first visible background -->
+<link rel="preload" as="image" href="1000200489.jpg">
 
-        /* --- BACKGROUND IMAGES --- */
-        .bg-image, .cake-bg-image, .final-hanging-photos-bg {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; 
-        }
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
 
-        .bg-image { z-index: 1; transition: opacity 2.5s ease-in-out; }
+body{
+background:#111;
+display:flex;
+justify-content:center;
+align-items:center;
+min-height:100vh;
+font-family:sans-serif;
+overflow:hidden
+}
 
-        .cake-bg-image {
-            z-index: 50; opacity: 0;
-            transition: opacity 2.5s ease-in-out, filter 1.5s ease; 
-            pointer-events: none; filter: brightness(1) contrast(1); 
-        }
-        .cake-bg-image.show { opacity: 1; }
-        .cake-bg-image.lights-blinking { animation: deep-blink 3s infinite ease-in-out; }
-        .cake-bg-image.lights-paused { animation: none; filter: brightness(0.3) contrast(0.9); transition: filter 2s ease; }
+/* LOADER */
+#loader{
+position:fixed;
+inset:0;
+background:#000;
+z-index:100;
+display:flex;
+justify-content:center;
+align-items:center;
+color:#fff;
+font-family:'Pacifico',cursive;
+font-size:1.5rem;
+transition:opacity 1s ease
+}
+#loader.loaded{opacity:0;pointer-events:none}
 
-        .final-hanging-photos-bg {
-            z-index: 60; opacity: 0; transition: opacity 2.5s ease-in-out; pointer-events: none;
-        }
-        .final-hanging-photos-bg.show { opacity: 1; }
+/* CARD */
+.card-container{
+position:relative;
+aspect-ratio:9/16;
+width:min(500px,53.4vh);
+border-radius:16px;
+overflow:hidden;
+background:#000;
+box-shadow:0 0 50px rgba(0,0,0,.8)
+}
 
-        @keyframes deep-blink {
-            0%, 100% { filter: brightness(1.1) contrast(1.1); } 
-            50% { filter: brightness(0.3) contrast(0.9); } 
-        }
+.bg-image,
+.cake-bg-image,
+.final-hanging-photos-bg{
+position:absolute;
+inset:0;
+width:100%;
+height:100%;
+object-fit:cover
+}
 
-        /* --- OVERLAYS --- */
-        .darkness-overlay {
-            position: absolute; inset: 0; background-color: rgba(0, 0, 0, 0.95);
-            z-index: 10; transition: background-color 2.0s ease-in-out, opacity 2.5s ease-in-out;
-            pointer-events: none;
-        }
-        .lights-on .darkness-overlay { background-color: rgba(0, 0, 0, 0); }
-        .dim-for-text .darkness-overlay { background-color: rgba(0, 0, 0, 0.6) !important; }
+.bg-image{z-index:1}
+.cake-bg-image{z-index:50;opacity:0;transition:opacity 2.5s ease}
+.cake-bg-image.show{opacity:1}
+.final-hanging-photos-bg{z-index:60;opacity:0;transition:opacity 2.5s ease}
+.final-hanging-photos-bg.show{opacity:1}
 
-        /* --- INTERACTIVE ELEMENTS --- */
-        
-        /* UPDATED HOTSPOT: High Visibility Glow */
-        .hotspot {
-            position: absolute; top: 30%; left: 37%; width: 26%; height: 20%;
-            z-index: 20; cursor: pointer;
-            
-            /* Visual Styles for Visibility */
-            border: 3px solid rgba(255, 255, 255, 0.9);
-            background-color: rgba(255, 255, 0, 0.2); /* Faint yellow fill */
-            border-radius: 8px;
-            box-shadow: 0 0 20px rgba(255, 255, 0, 0.8), inset 0 0 20px rgba(255, 255, 0, 0.4);
-            
-            /* Pulsing Animation */
-            animation: hotspotPulse 1s infinite alternate;
-        }
-        .hotspot.hidden { display: none; }
+/* OVERLAY */
+.darkness-overlay{
+position:absolute;
+inset:0;
+background:rgba(0,0,0,.95);
+z-index:10;
+transition:background 2s ease,opacity 2.5s ease
+}
+.lights-on .darkness-overlay{background:rgba(0,0,0,0)}
+.dim-for-text .darkness-overlay{background:rgba(0,0,0,.6)!important}
 
-        @keyframes hotspotPulse {
-            0% { transform: scale(1); opacity: 0.7; box-shadow: 0 0 10px rgba(255, 255, 0, 0.5); }
-            100% { transform: scale(1.05); opacity: 1; box-shadow: 0 0 30px rgba(255, 255, 0, 1); border-color: #fff; }
-        }
+/* HOTSPOT */
+.hotspot{
+position:absolute;
+top:30%;left:37%;
+width:26%;height:20%;
+z-index:20;
+cursor:pointer;
+border:3px solid #fff;
+background:rgba(255,255,0,.2);
+border-radius:8px;
+box-shadow:0 0 25px yellow;
+animation:pulse 1s infinite alternate
+}
+.hotspot.hidden{display:none}
+@keyframes pulse{from{transform:scale(1)}to{transform:scale(1.05)}}
 
-        .switch-hint {
-            position: absolute; top: 110%; left: 50%; transform: translateX(-50%);
-            color: #fff; font-family: 'Caveat', cursive; font-size: 1.5rem;
-            white-space: nowrap; text-shadow: 0 0 10px rgba(255, 255, 100, 0.8);
-            animation: pulseHint 1.5s infinite alternate; pointer-events: none;
-        }
-        @keyframes pulseHint {
-            0% { opacity: 0.6; transform: translateX(-50%) scale(0.9); }
-            100% { opacity: 1; transform: translateX(-50%) scale(1.1); }
-        }
+.switch-hint{
+position:absolute;
+top:110%;left:50%;
+transform:translateX(-50%);
+font-family:'Caveat',cursive;
+font-size:1.5rem;
+color:#fff
+}
 
-        .pull-string-container {
-            position: absolute; top: -300px; right: 15%; z-index: 15;
-            display: flex; flex-direction: column; align-items: center;
-            transition: top 1s cubic-bezier(0.5, -0.5, 0.5, 1.5), opacity 0.5s ease-in-out; 
-            cursor: pointer;
-        }
-        .pull-string-container.drop { top: 0; }
-        .pull-anim { animation: pullAction 0.4s ease-in-out; }
-        @keyframes pullAction { 0% { transform: translateY(0); } 50% { transform: translateY(40px); } 100% { transform: translateY(0); } }
+/* PULL STRING */
+.pull-string-container{
+position:absolute;
+top:-300px;
+right:15%;
+z-index:15;
+display:flex;
+flex-direction:column;
+align-items:center;
+transition:top 1s cubic-bezier(.5,-.5,.5,1.5);
+cursor:pointer
+}
+.pull-string-container.drop{top:0}
 
-        .string-line { width: 2px; height: 120px; background: #fff; box-shadow: 1px 1px 3px #000; }
-        .string-handle { width: 30px; height: 30px; background: #ff4757; border-radius: 50%; border: 3px solid #fff; }
+.string-line{width:2px;height:120px;background:#fff}
+.string-handle{width:30px;height:30px;background:#ff4757;border-radius:50%}
 
-        .string-hint {
-            position: absolute; right: 40px; bottom: 0;
-            color: #fff; font-family: 'Caveat', cursive; font-size: 1.4rem;
-            white-space: nowrap; background: rgba(0,0,0,0.5); padding: 5px 10px; border-radius: 10px;
-            animation: bounceHint 1s infinite; pointer-events: none;
-        }
-        .string-hint::after { content: '→'; margin-left: 5px; }
-        @keyframes bounceHint { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(-5px); } }
+/* BALLOONS */
+.balloon{
+position:absolute;
+bottom:-200px;
+width:70px;
+height:90px;
+border-radius:50%;
+background:#ff6b81;
+z-index:5;
+transition:bottom linear,opacity 2.5s;
+cursor:pointer
+}
+.balloon.popped{transform:scale(1.5);opacity:0}
 
-        /* --- BALLOONS --- */
-        .balloon {
-            position: absolute; bottom: -200px; width: 70px; height: 90px;
-            background: #ff6b81; border-radius: 50%; display: flex; justify-content: center; align-items: center;
-            overflow: hidden; box-shadow: inset -5px -5px 10px rgba(0,0,0,0.2); z-index: 5;
-            transition: opacity 2.5s ease-in-out; cursor: crosshair; 
-        }
-        .balloon img { width: 100%; height: 100%; object-fit: cover; opacity: 0.9; pointer-events: none; }
-        
-        .balloon.popped {
-            transform: scale(1.5) !important; opacity: 0 !important;
-            transition: transform 0.1s ease-out, opacity 0.1s ease-out !important;
-        }
+/* MESSAGE */
+.birthday-message{
+position:absolute;
+top:40%;
+width:100%;
+text-align:center;
+font-family:'Pacifico',cursive;
+font-size:3rem;
+color:#fff;
+opacity:0;
+transition:opacity 2s ease
+}
+.birthday-message.show{opacity:1}
 
-        .confetti {
-            position: absolute; width: 8px; height: 8px; z-index: 60; pointer-events: none;
-        }
+/* BUTTON */
+.cake-button{
+position:absolute;
+top:65%;left:50%;
+transform:translateX(-50%);
+padding:12px 24px;
+font-family:'Pacifico',cursive;
+background:#ff4757;
+color:#fff;
+border-radius:25px;
+opacity:0;
+pointer-events:none;
+transition:.8s
+}
+.cake-button.show{opacity:1;pointer-events:auto}
 
-        .birthday-message {
-            position: absolute; top: 40%; width: 100%; text-align: center;
-            font-family: 'Pacifico', cursive; color: #ffffff; font-size: 3rem;
-            text-shadow: 0 4px 15px rgba(0,0,0,0.9), 0 0 20px #ff6b81; 
-            opacity: 0; z-index: 30; pointer-events: none;
-            transition: opacity 2s ease, transform 2s ease; transform: scale(0.8);
-        }
-        .birthday-message.show { opacity: 1; transform: scale(1); }
+/* 3D CARD */
+.greeting-card-3d-container{
+position:absolute;
+inset:0;
+z-index:70;
+display:flex;
+justify-content:center;
+align-items:center;
+opacity:0;
+transition:.8s
+}
+.greeting-card-3d-container.show{opacity:1}
 
-        .cake-button {
-            position: absolute; top: 65%; left: 50%; transform: translateX(-50%) scale(0.9);
-            padding: 12px 24px; font-family: 'Pacifico', cursive; font-size: 1.2rem;
-            color: #fff; background: linear-gradient(45deg, #ff4757, #ff6b81);
-            border: 2px solid #fff; border-radius: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            cursor: pointer; opacity: 0; z-index: 35; transition: all 0.8s ease; pointer-events: none; white-space: nowrap;
-        }
-        .cake-button.show { opacity: 1; transform: translateX(-50%) scale(1); pointer-events: auto; }
-        
-        /* --- 3D CARD LAYOUT --- */
-        .greeting-card-3d-container {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 70; display: flex; justify-content: center; align-items: center;
-            pointer-events: none; transition: opacity 0.8s ease;
-            perspective: 1500px; opacity: 0;
-        }
-        .greeting-card-3d-container.show { opacity: 1; pointer-events: auto; }
+.card-wrapper{
+width:80%;
+aspect-ratio:4/3;
+cursor:pointer;
+transition:transform 1s
+}
+.card-wrapper.card-is-open{transform:translateY(25%)}
 
-        .card-wrapper {
-            position: relative; width: 80%; aspect-ratio: 4 / 3;
-            transform-style: preserve-3d; transition: transform 1s ease-in-out; cursor: pointer;
-        }
-        .card-wrapper.card-is-open { transform: translateY(25%); }
+.front-side{
+background:url('1000200513.jpg') center/cover no-repeat;
+height:100%
+}
 
-        .page {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            backface-visibility: hidden; border-radius: 8px; overflow: hidden;
-        }
+.slideshow-container{
+width:90%;
+height:85%;
+background:#000
+}
+.slide-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:1s}
+.slide-img.active{opacity:1}
 
-        .front-page-wrapper {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            transform-style: preserve-3d; transform-origin: top center;
-            transition: transform 1.2s cubic-bezier(0.645, 0.045, 0.355, 1); z-index: 2;
-        }
-
-        .front-side {
-            background-image: url('1000200513.jpg'); 
-            background-size: cover; background-position: center; border: 2px solid #fff;
-        }
-
-        .back-side {
-            transform: rotateX(180deg); background-color: #f7f1e3;
-            background-image: radial-gradient(#d1c3a0 1px, transparent 1px); background-size: 10px 10px;
-            display: flex; justify-content: center; align-items: center;
-            color: #5d4037; font-family: 'Caveat', cursive; font-size: 1.8rem;
-            text-align: center; padding: 20px;
-        }
-
-        .cursor {
-            display: inline-block; width: 2px; height: 1.2em; background-color: #5d4037;
-            animation: blink 0.7s infinite; vertical-align: bottom; margin-left: 2px;
-        }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-
-        .inside-bottom-page {
-            background-color: #fff; z-index: 1;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            padding: 10px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); border: 2px solid #fff;
-        }
-        
-        .slideshow-container {
-            width: 90%; height: 85%; position: relative; overflow: hidden;
-            border-radius: 4px; box-shadow: inset 0 0 10px rgba(0,0,0,0.2); background: #000;
-        }
-        .slide-img {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            object-fit: cover; opacity: 0; transition: opacity 1s ease-in-out;
-        }
-        .slide-img.active { opacity: 1; }
-
-        .card-wrapper.card-is-open .front-page-wrapper { transform: rotateX(180deg); }
-
-        .interaction-hint {
-            position: absolute; bottom: -50px; width: 100%; text-align: center;
-            color: #fff; font-family: 'Pacifico', cursive; opacity: 0; transition: opacity 0.5s;
-        }
-        .greeting-card-3d-container.show .interaction-hint { opacity: 1; transition-delay: 1.0s; }
-
-        .replay-btn {
-            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
-            padding: 10px 20px; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.5);
-            color: #fff; font-family: 'Pacifico', cursive; border-radius: 20px; cursor: pointer;
-            z-index: 70; opacity: 0; pointer-events: none; transition: opacity 1s;
-        }
-        .final-hanging-photos-bg.show ~ .replay-btn { opacity: 1; pointer-events: auto; }
-
-        .fade-out-slow { opacity: 0 !important; pointer-events: none !important; }
-    </style>
+.replay-btn{
+position:absolute;
+bottom:30px;
+left:50%;
+transform:translateX(-50%);
+padding:10px 20px;
+background:rgba(255,255,255,.2);
+color:#fff;
+border-radius:20px;
+opacity:0;
+transition:1s
+}
+.final-hanging-photos-bg.show~.replay-btn{opacity:1}
+</style>
 </head>
+
 <body>
 
-    <div id="loader">Loading Surprise...</div>
+<div id="loader">Loading Surprise...</div>
 
-    <audio id="bgMusic" loop>
-        <source src="Hbd.mp3" type="audio/mpeg">
-    </audio>
-    <audio id="sfxClick"><source src="click.wav" type="audio/mpeg"></audio>
-    <audio id="sfxPop"><source src="pop.wav" type="audio/mpeg"></audio>
-    <audio id="sfxFlip"><source src="flip.mp3" type="audio/mpeg"></audio>
+<!-- AUDIO (DELAYED LOAD) -->
+<audio id="bgMusic" preload="none" loop></audio>
+<audio id="sfxClick" preload="none"></audio>
+<audio id="sfxPop" preload="none"></audio>
+<audio id="sfxFlip" preload="none"></audio>
 
-    <div class="card-container" id="mainContainer">
-        
-        <img src="1000200489.jpg" alt="Cozy Room" class="bg-image" id="initialImage">
+<div class="card-container" id="mainContainer">
 
-        <div class="darkness-overlay"></div>
-        
-        <div class="hotspot" id="lightSwitch">
-            <div class="switch-hint">Tap to Light Up</div>
-        </div>
+<img src="1000200489.jpg" class="bg-image" id="initialImage">
 
-        <div class="pull-string-container" id="pullString">
-            <div class="string-line"></div>
-            <div class="string-handle"></div>
-            <div class="string-hint">Pull Me</div>
-        </div>
+<div class="darkness-overlay"></div>
 
-        <div class="birthday-message" id="finalMessage">Happy Birthday!</div>
-        <button class="cake-button" id="cakeButton">Here is Your Birthday Cake</button>
+<div class="hotspot" id="lightSwitch">
+<div class="switch-hint">Tap to Light Up</div>
+</div>
 
-        <img src="1000200496.jpg" alt="Birthday Cake Scene" class="cake-bg-image" id="cakeImage">
-        
-        <div class="greeting-card-3d-container" id="card3DContainer">
-            <div class="card-wrapper" id="cardWrapper">
-                
-                <div class="front-page-wrapper">
-                    <div class="page front-side"></div>
-                    <div class="page back-side">
-                        <div id="handwritingText"></div><span class="cursor"></span>
-                    </div>
-                </div>
+<div class="pull-string-container" id="pullString">
+<div class="string-line"></div>
+<div class="string-handle"></div>
+</div>
 
-                <div class="page inside-bottom-page">
-                    <div class="slideshow-container" id="slideshowBox">
-                        <img src="IMG_20260107_074435_673.jpg" class="slide-img active">
-                        <img src="IMG_20260107_074432_516.jpg" class="slide-img">
-                        <img src="IMG_20260107_074422_922.jpg" class="slide-img">
-                        <img src="IMG_20260107_101003_615.jpg" class="slide-img">
-                        <img src="IMG_20260107_101001_324.jpg" class="slide-img">
-                        <img src="IMG_20260107_095637_639.jpg" class="slide-img">
-                        <img src="IMG_20260107_081352_195.jpg" class="slide-img">
-                    </div>
-                </div>
+<div class="birthday-message" id="finalMessage">Happy Birthday!</div>
+<button class="cake-button" id="cakeButton">Here is Your Birthday Cake</button>
 
-                <div class="interaction-hint" id="cardHint">Tap card to open</div>
-            </div>
-        </div>
+<img src="1000200496.jpg" class="cake-bg-image" id="cakeImage" loading="lazy">
 
-        <img src="hanging_img.png" alt="Cozy Room with Hanging Photos" class="final-hanging-photos-bg" id="finalHangingPhotosBg">
-        <button class="replay-btn" onclick="location.reload()">Replay Surprise ↻</button>
+<div class="greeting-card-3d-container" id="card3DContainer">
+<div class="card-wrapper" id="cardWrapper">
+<div class="front-side"></div>
+<div class="slideshow-container">
+<img src="IMG_1.jpg" class="slide-img active" loading="lazy">
+<img src="IMG_2.jpg" class="slide-img" loading="lazy">
+<img src="IMG_3.jpg" class="slide-img" loading="lazy">
+</div>
+</div>
+</div>
 
-    </div>
+<img src="hanging_img.png" class="final-hanging-photos-bg" id="finalHangingPhotosBg" loading="lazy">
+<button class="replay-btn" onclick="location.reload()">Replay ↻</button>
 
-    <script>
-        const container = document.getElementById('mainContainer');
-        const lightSwitch = document.getElementById('lightSwitch');
-        const pullString = document.getElementById('pullString');
-        const message = document.getElementById('finalMessage');
-        const cakeButton = document.getElementById('cakeButton');
-        const cakeImage = document.getElementById('cakeImage');
-        const initialImage = document.getElementById('initialImage');
-        const darknessOverlay = document.querySelector('.darkness-overlay');
-        const card3DContainer = document.getElementById('card3DContainer');
-        const cardWrapper = document.getElementById('cardWrapper');
-        const slideshowImages = document.querySelectorAll('.slide-img');
-        const bgMusic = document.getElementById('bgMusic');
-        const finalHangingPhotosBg = document.getElementById('finalHangingPhotosBg');
-        const cardHint = document.getElementById('cardHint');
-        
-        // SFX
-        const sfxClick = document.getElementById('sfxClick');
-        const sfxPop = document.getElementById('sfxPop');
-        const sfxFlip = document.getElementById('sfxFlip');
+</div>
 
-        let slideIndex = 0;
-        let slideInterval;
-        
-        // Handwriting Config
-        const textToType = "Special Memories...";
-        const typeContainer = document.getElementById('handwritingText');
-        let typeIndex = 0;
-        let isTyping = false;
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+setTimeout(()=>document.getElementById('loader').classList.add('loaded'),300)
+})
 
-        // --- UPDATED LOADING SCREEN: 2 Seconds Fixed ---
-        window.addEventListener('load', () => {
-            const loader = document.getElementById('loader');
-            // Wait 2 seconds before fading out the loader
-            setTimeout(() => {
-                loader.classList.add('loaded'); 
-            }, 1000);
-        });
+const lightSwitch=document.getElementById('lightSwitch')
+const pullString=document.getElementById('pullString')
+const message=document.getElementById('finalMessage')
+const cakeButton=document.getElementById('cakeButton')
+const cakeImage=document.getElementById('cakeImage')
+const container=document.getElementById('mainContainer')
+const card3D=document.getElementById('card3DContainer')
+const card=document.getElementById('cardWrapper')
+const slides=document.querySelectorAll('.slide-img')
 
-        // 1. Lights On
-        lightSwitch.addEventListener('click', () => {
-            playSfx(sfxClick);
-            bgMusic.volume = 0.5;
-            bgMusic.play().catch(e => console.log("Audio prevented:", e));
+let index=0,interval
 
-            container.classList.add('lights-on');
-            lightSwitch.classList.add('hidden');
-            setTimeout(() => { pullString.classList.add('drop'); }, 1500);
-        });
+lightSwitch.onclick=()=>{
+container.classList.add('lights-on')
+lightSwitch.classList.add('hidden')
+setTimeout(()=>pullString.classList.add('drop'),1500)
+}
 
-        // 2. Pull String
-        pullString.addEventListener('click', () => {
-            playSfx(sfxClick);
-            pullString.classList.add('pull-anim');
-            document.querySelector('.string-hint').style.display = 'none';
+pullString.onclick=()=>{
+for(let i=0;i<10;i++){
+let b=document.createElement('div')
+b.className='balloon'
+b.style.left=Math.random()*80+10+'%'
+b.style.background=`hsl(${Math.random()*360},80%,60%)`
+container.appendChild(b)
+requestAnimationFrame(()=>b.style.bottom='120%')
+setTimeout(()=>b.remove(),5000)
+}
+setTimeout(()=>{
+message.classList.add('show')
+cakeButton.classList.add('show')
+},2000)
+}
 
-            setTimeout(() => {
-                releaseBalloons();
-                pullString.style.opacity = '0'; 
-                pullString.style.pointerEvents = 'none';
-            }, 300);
-        });
+cakeButton.onclick=()=>{
+cakeImage.classList.add('show')
+setTimeout(()=>card3D.classList.add('show'),4000)
+}
 
-        function releaseBalloons() {
-            const colors = ['#ff4757', '#2ed573', '#1e90ff', '#ffa502', '#ff6b81'];
-            for(let i=0; i < 15; i++) {
-                const b = document.createElement('div');
-                b.className = 'balloon';
-                b.style.left = Math.random() * 80 + 10 + '%'; 
-                b.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
-                
-                b.addEventListener('click', (e) => {
-                    e.stopPropagation(); 
-                    playSfx(sfxPop); // Sound
-                    b.classList.add('popped'); 
-                    setTimeout(() => b.remove(), 100); 
-                });
+card.onclick=()=>{
+if(!interval){
+interval=setInterval(()=>{
+slides[index].classList.remove('active')
+index=(index+1)%slides.length
+slides[index].classList.add('active')
+},2500)
+}
+card.classList.toggle('card-is-open')
+}
+</script>
 
-                const speed = Math.random() * 3 + 4; 
-                b.style.transition = `bottom ${speed}s linear, transform 3s ease-in-out infinite alternate, opacity 2.5s ease-in-out`;
-                b.style.transform = `translateX(${Math.random()*20 - 10}px)`; 
-                
-                const img = document.createElement('img');
-                img.src = `https://picsum.photos/100/120?random=${i + 50}`;
-                b.appendChild(img);
-                container.appendChild(b);
-                
-                requestAnimationFrame(() => { b.style.bottom = '120%'; });
-                setTimeout(() => b.remove(), speed * 1000);
-            }
-            setTimeout(() => {
-                message.classList.add('show');
-                container.classList.add('dim-for-text');
-                setTimeout(() => { cakeButton.classList.add('show'); }, 1500); 
-            }, 2000);
-        }
-
-        // 3. Cake Scene & Confetti
-        cakeButton.addEventListener('click', () => {
-            playSfx(sfxClick);
-            initialImage.classList.add('fade-out-slow');
-            darknessOverlay.classList.add('fade-out-slow');
-            message.classList.add('fade-out-slow');
-            cakeButton.classList.add('fade-out-slow');
-            document.querySelectorAll('.balloon').forEach(b => b.classList.add('fade-out-slow'));
-
-            cakeImage.classList.add('show');
-            fireConfetti(); 
-
-            cakeImage.classList.add('lights-blinking');
-
-            // --- CHANGED TIME: 3 Seconds ---
-            setTimeout(() => {
-                cakeImage.classList.remove('lights-blinking');
-                cakeImage.classList.add('lights-paused'); 
-                card3DContainer.classList.add('show');    
-            }, 5000); 
-        });
-
-        function fireConfetti() {
-            const colors = ['#ff4757', '#2ed573', '#1e90ff', '#ffa502', '#ffffff', '#ff9ff3'];
-            for (let i = 0; i < 60; i++) {
-                const confetti = document.createElement('div');
-                confetti.classList.add('confetti');
-                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.left = Math.random() * 100 + '%';
-                confetti.style.top = '-10px'; 
-                const duration = Math.random() * 3 + 2; 
-                confetti.style.transition = `top ${duration}s linear, transform ${duration}s linear, opacity ${duration}s ease`;
-                confetti.style.opacity = Math.random() + 0.5;
-                container.appendChild(confetti);
-                setTimeout(() => {
-                    confetti.style.top = '120%'; 
-                    confetti.style.transform = `rotate(${Math.random() * 720}deg)`;
-                    confetti.style.opacity = '0';
-                }, 50);
-                setTimeout(() => confetti.remove(), duration * 1000);
-            }
-        }
-
-        // 4. Toggle Card on Click
-        cardWrapper.addEventListener('click', () => {
-            const isOpen = cardWrapper.classList.contains('card-is-open');
-
-            if (!isOpen) {
-                // OPEN IT
-                playSfx(sfxFlip);
-                cardWrapper.classList.add('card-is-open');
-                startSlideshow();
-                cardHint.textContent = "Tap card to close";
-                
-                // Start Handwriting Effect
-                if(!isTyping && typeIndex === 0) {
-                    setTimeout(typeWriter, 500); 
-                }
-
-            } else {
-                // CLOSE IT -> Go to Final Scene
-                playSfx(sfxFlip);
-                cardWrapper.classList.remove('card-is-open');
-                
-                setTimeout(() => {
-                    card3DContainer.classList.remove('show');
-                    clearInterval(slideInterval);
-                    finalHangingPhotosBg.classList.add('show');
-                }, 1000); 
-            }
-        });
-
-        // Typewriter Effect Function
-        function typeWriter() {
-            if (typeIndex < textToType.length) {
-                isTyping = true;
-                typeContainer.innerHTML += textToType.charAt(typeIndex);
-                typeIndex++;
-                setTimeout(typeWriter, 100); // Typing speed
-            } else {
-                isTyping = false;
-                document.querySelector('.cursor').style.display = 'none'; // Hide cursor when done
-            }
-        }
-
-        function startSlideshow() {
-            if (slideInterval) return;
-            slideInterval = setInterval(() => {
-                slideshowImages[slideIndex].classList.remove('active');
-                slideIndex = (slideIndex + 1) % slideshowImages.length;
-                slideshowImages[slideIndex].classList.add('active');
-            }, 2500);
-        }
-
-        // Helper to play sound safely
-        function playSfx(audioEl) {
-            if(audioEl) {
-                audioEl.currentTime = 0;
-                audioEl.play().catch(e => {}); // Ignore error if not loaded
-            }
-        }
-    </script>
 </body>
 </html>
-
+                
