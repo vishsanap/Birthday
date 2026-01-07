@@ -78,11 +78,22 @@
         .dim-for-text .darkness-overlay { background-color: rgba(0, 0, 0, 0.6) !important; }
 
         /* --- INTERACTIVE ELEMENTS --- */
+        
+        /* UPDATED HOTSPOT: Now glows so user knows where to click */
         .hotspot {
             position: absolute; top: 30%; left: 37%; width: 26%; height: 20%;
             z-index: 20; cursor: pointer;
+            border: 2px solid rgba(255, 255, 100, 0.5); /* Visible border */
+            border-radius: 4px;
+            box-shadow: 0 0 15px rgba(255, 255, 0, 0.6); /* Glow effect */
+            animation: hotspotPulse 1.5s infinite alternate;
         }
         .hotspot.hidden { display: none; }
+
+        @keyframes hotspotPulse {
+            0% { box-shadow: 0 0 5px rgba(255, 255, 0, 0.3); border-color: rgba(255, 255, 100, 0.2); }
+            100% { box-shadow: 0 0 25px rgba(255, 255, 0, 1); border-color: rgba(255, 255, 100, 1); }
+        }
 
         .switch-hint {
             position: absolute; top: 110%; left: 50%; transform: translateX(-50%);
@@ -188,11 +199,10 @@
             transform: rotateX(180deg); background-color: #f7f1e3;
             background-image: radial-gradient(#d1c3a0 1px, transparent 1px); background-size: 10px 10px;
             display: flex; justify-content: center; align-items: center;
-            color: #5d4037; font-family: 'Caveat', cursive; font-size: 1.8rem; /* Increased size for handwriting */
+            color: #5d4037; font-family: 'Caveat', cursive; font-size: 1.8rem;
             text-align: center; padding: 20px;
         }
 
-        /* Cursor for handwriting effect */
         .cursor {
             display: inline-block; width: 2px; height: 1.2em; background-color: #5d4037;
             animation: blink 0.7s infinite; vertical-align: bottom; margin-left: 2px;
@@ -223,7 +233,6 @@
         }
         .greeting-card-3d-container.show .interaction-hint { opacity: 1; transition-delay: 1.0s; }
 
-        /* REPLAY BUTTON (FINAL SCENE) */
         .replay-btn {
             position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
             padding: 10px 20px; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.5);
@@ -244,7 +253,7 @@
     </audio>
     <audio id="sfxClick"><source src="click.wav" type="audio/mpeg"></audio>
     <audio id="sfxPop"><source src="pop.wav" type="audio/mpeg"></audio>
-    <audio id="sfxFlip"><source src="flip. mp3" type="audio/mpeg"></audio>
+    <audio id="sfxFlip"><source src="flip.mp3" type="audio/mpeg"></audio>
 
     <div class="card-container" id="mainContainer">
         
@@ -328,9 +337,13 @@
         let typeIndex = 0;
         let isTyping = false;
 
+        // --- UPDATED LOADING SCREEN: 2 Seconds Fixed ---
         window.addEventListener('load', () => {
             const loader = document.getElementById('loader');
-            loader.classList.add('loaded'); 
+            // Wait 2 seconds before fading out the loader
+            setTimeout(() => {
+                loader.classList.add('loaded'); 
+            }, 2000);
         });
 
         // 1. Lights On
@@ -405,12 +418,12 @@
 
             cakeImage.classList.add('lights-blinking');
 
-            // Wait 4s, dim lights, show CLOSED CARD
+            // --- CHANGED TIME: 3 Seconds ---
             setTimeout(() => {
                 cakeImage.classList.remove('lights-blinking');
                 cakeImage.classList.add('lights-paused'); 
                 card3DContainer.classList.add('show');    
-            }, 4000); 
+            }, 3000); 
         });
 
         function fireConfetti() {
@@ -447,7 +460,7 @@
                 
                 // Start Handwriting Effect
                 if(!isTyping && typeIndex === 0) {
-                    setTimeout(typeWriter, 500); // Small delay to sync with flip
+                    setTimeout(typeWriter, 500); 
                 }
 
             } else {
@@ -495,3 +508,4 @@
     </script>
 </body>
 </html>
+
